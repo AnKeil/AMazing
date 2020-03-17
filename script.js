@@ -1,12 +1,14 @@
 "use strict"
 
-const WIDTH = 30
+const WIDTH = 15
 const HEIGHT = WIDTH
 let data = []
 let active
 let isMouseDown = false
 let draw = true
+let tool = "drawErase"
 
+// create blank maze
 function initialize() {
 	for (let y=0; y<HEIGHT; y++) {
 		data[y] = []
@@ -16,6 +18,7 @@ function initialize() {
 	}
 }
 
+// draw initial maze
 function render() {
 	let maze = document.getElementById("maze")
 	for (let y=0; y<HEIGHT; y++) {
@@ -24,7 +27,7 @@ function render() {
 		for (let x=0; x<WIDTH; x++) {
 			let tile = document.createElement("div")
 			tile.classList.add("tile")
-			tile.classList.add("open")
+			tile.setAttribute("data-value", data[y][x])
 			tile.setAttribute("data-x", x)
 			tile.setAttribute("data-y", y)
 			tile.onmouseover = drawErase
@@ -40,15 +43,25 @@ function render() {
 
 function mouseDown(e) {
 	isMouseDown = true
-	// if tile is open
-	if ( e.target.classList.contains("open") ) {
-		draw = true
+	switch (tool) {
+		case "drawErase":
+			// if tile is open
+			if ( e.target.getAttribute("data-value") == "0" ) {
+				draw = true
+			}
+			else {
+				draw = false
+			}
+			// draw or erase tile we clicked
+			drawErase(e)
+			break
+		case "setStart":
+			
+			break
+		case "setEnd":
+			
+			break
 	}
-	else {
-		draw = false
-	}
-	// draw or erase tile we clicked
-	drawErase(e)
 }
 
 function mouseUp() {
@@ -58,18 +71,19 @@ function mouseUp() {
 function drawErase(e) {
 	
 	if (isMouseDown) {
+		let x = Number( e.target.getAttribute("data-x") )
+		let y = Number( e.target.getAttribute("data-y") )
 		// if we are drawing
 		if (draw) {
-			//console.log("Closing tile...")
-			e.target.classList.remove("open")
-			e.target.classList.add("closed")
+			console.log("Closing...")
+			data[y][x] = 1
+			e.target.setAttribute("data-value", "1")
 		}
 		// if we are erasing
 		else {
-			//console.log("Opening tile...")
-			e.target.classList.remove("closed")
-			e.target.classList.add("open")
-
+			console.log("Opening...")
+			data[y][x] = 0
+			e.target.setAttribute("data-value", "0")
 		}
 	}
 }

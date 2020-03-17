@@ -50,10 +50,19 @@ html {
 	border: solid black 1px;
 }
 
-.tile.open {
-	
+.tile[data-value="1"] {
+	background: black;
 }
 
-.tile.closed {
-	background: black;
+.tile[data-value="0"] {
+	background: white;
+}
+
+#controls {
+	display: flex;
+	flex-direction: column;
+	border: solid black 1px;
+	width: 300px;
+	margin-top: 10px;
+	padding: 10px;
 }
