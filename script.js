@@ -5,6 +5,7 @@ const HEIGHT = WIDTH
 let data = []
 let active
 let isMouseDown = false
+let draw = true
 
 function initialize() {
 	for (let y=0; y<HEIGHT; y++) {
@@ -26,8 +27,7 @@ function render() {
 			tile.classList.add("open")
 			tile.setAttribute("data-x", x)
 			tile.setAttribute("data-y", y)
-			//tile.addEventListener("onclick", toggleOpen)
-			tile.onmouseover = toggleOpen
+			tile.onmouseover = drawErase
 			// append to row
 			row.appendChild(tile)
 		}
@@ -38,25 +38,38 @@ function render() {
 	}
 }
 
-function mouseDown() {
+function mouseDown(e) {
 	isMouseDown = true
+	// if tile is open
+	if ( e.target.classList.contains("open") ) {
+		draw = true
+	}
+	else {
+		draw = false
+	}
+	// draw or erase tile we clicked
+	drawErase(e)
 }
 
 function mouseUp() {
 	isMouseDown = false
 }
 
-function toggleOpen(e) {
+function drawErase(e) {
+	
 	if (isMouseDown) {
-		// if tile is open
-		if ( e.target.classList.contains("open") ) {
+		// if we are drawing
+		if (draw) {
+			//console.log("Closing tile...")
 			e.target.classList.remove("open")
 			e.target.classList.add("closed")
 		}
-		// if tile is closed
-		else if ( e.target.classList.contains("closed") ) {
+		// if we are erasing
+		else {
+			//console.log("Opening tile...")
 			e.target.classList.remove("closed")
 			e.target.classList.add("open")
+
 		}
 	}
 }
