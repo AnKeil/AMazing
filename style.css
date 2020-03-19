@@ -7,6 +7,10 @@
 	--borderColor: black;
 }
 
+body {
+	height: 100vh;
+}
+
 @keyframes batman {
 	0% {
 		width: 40px;
