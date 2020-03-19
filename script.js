@@ -1,5 +1,12 @@
 "use strict"
 
+class Tuple {
+	constructor(x, y) {
+		this.x = x
+		this.y = y
+	}
+}
+
 const WIDTH = 15
 const HEIGHT = WIDTH
 let data = []
@@ -7,6 +14,20 @@ let active
 let isMouseDown = false
 let draw = true
 let tool = "drawErase"
+let startPoint = new Tuple(0, 0)
+let endPoint = new Tuple(0, 0)
+
+document.getElementById("drawErase").onclick = function() {
+	tool = "drawErase"
+}
+
+document.getElementById("setStart").onclick = function() {
+	tool = "setStart"
+}
+
+document.getElementById("setEnd").onclick = function() {
+	tool = "setEnd"
+}
 
 // create blank maze
 function initialize() {
@@ -30,15 +51,20 @@ function render() {
 			tile.setAttribute("data-value", data[y][x])
 			tile.setAttribute("data-x", x)
 			tile.setAttribute("data-y", y)
-			tile.onmouseover = drawErase
+			tile.id = "tile" + x + "," + y
+			tile.onmouseover = mouseOver
+			tile.onmousedown = mouseDown
+			tile.onmouseup = mouseUp
 			// append to row
 			row.appendChild(tile)
 		}
 		// append to document
 		maze.appendChild(row)
-		onmousedown = mouseDown
-		onmouseup = mouseUp
 	}
+}
+
+function getTileByCoordinates(x, y) {
+	return document.getElementById("tile" + x + "," + y)
 }
 
 function mouseDown(e) {
@@ -56,10 +82,10 @@ function mouseDown(e) {
 			drawErase(e)
 			break
 		case "setStart":
-			
+			setStart(e)
 			break
 		case "setEnd":
-			
+			setEnd(e)
 			break
 	}
 }
@@ -68,23 +94,74 @@ function mouseUp() {
 	isMouseDown = false
 }
 
-function drawErase(e) {
-	
+function mouseOver(e) {
 	if (isMouseDown) {
+		switch (tool) {
+			case "drawErase":
+				drawErase(e)
+				break
+			case "setStart":
+				setStart(e)
+				break
+			case "setEnd":
+				setEnd(e)
+				break
+		}
+	}
+}
+
+function drawErase(e) {
+	let x = Number( e.target.getAttribute("data-x") )
+	let y = Number( e.target.getAttribute("data-y") )
+	// if we are drawing
+	if (draw) {
+		//console.log("Closing...")
+		data[y][x] = 1
+		e.target.setAttribute("data-value", "1")
+	}
+	// if we are erasing
+	else {
+		//console.log("Opening...")
+		data[y][x] = 0
+		e.target.setAttribute("data-value", "0")
+	}
+}
+
+function setStart(e) {
+	if (isMouseDown && tool == "setStart") {
 		let x = Number( e.target.getAttribute("data-x") )
 		let y = Number( e.target.getAttribute("data-y") )
-		// if we are drawing
-		if (draw) {
-			console.log("Closing...")
-			data[y][x] = 1
-			e.target.setAttribute("data-value", "1")
+		// remove old start
+		data[startPoint.y][startPoint.x] = 0
+		let oldTile = getTileByCoordinates(startPoint.x, startPoint.y)
+		if (oldTile) {
+			oldTile.removeAttribute("data-isStart")
 		}
-		// if we are erasing
-		else {
-			console.log("Opening...")
-			data[y][x] = 0
-			e.target.setAttribute("data-value", "0")
+		// set new start
+		// 2 represents start
+		data[y][x] = 2
+		startPoint.x = x
+		startPoint.y = y
+		e.target.setAttribute("data-isStart", "true")
+	}
+}
+
+function setEnd(e) {
+	if (isMouseDown && tool == "setEnd") {
+		let x = Number( e.target.getAttribute("data-x") )
+		let y = Number( e.target.getAttribute("data-y") )
+		// remove old end
+		data[endPoint.y][endPoint.x] = 0
+		let oldTile = getTileByCoordinates(endPoint.x, endPoint.y)
+		if (oldTile) {
+			oldTile.removeAttribute("data-isEnd")
 		}
+		// set new end
+		// 3 represents end
+		data[y][x] = 3
+		endPoint.x = x
+		endPoint.y = y
+		e.target.setAttribute("data-isEnd", "true")
 	}
 }
 

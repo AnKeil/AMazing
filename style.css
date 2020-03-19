@@ -58,6 +58,14 @@ html {
 	background: white;
 }
 
+.tile[data-isStart="true"] {
+	background: green;
+}
+
+.tile[data-isEnd="true"] {
+	background: red;
+}
+
 #controls {
 	display: flex;
 	flex-direction: column;
