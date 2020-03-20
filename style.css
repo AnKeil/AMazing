@@ -123,3 +123,17 @@ form * {
 input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
 	padding: 5px 10px;
 }
+
+/* MAZE LIST */
+
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	padding: 5px 20px;
+}
+
+tbody tr:nth-child(odd) {
+	background: lightgray;
+}
