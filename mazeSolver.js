@@ -63,8 +63,14 @@ function getTileByCoordinates(x, y) {
 }
 
 function move(x, y) {
+	
+	// out-of-bounds detection
+	let moveTo = data[playerPoint.y+y]
+	if (moveTo != undefined) {
+		moveTo = moveTo[playerPoint.x+x]
+	}
+	
 	let playerDiv = getTileByCoordinates(playerPoint.x, playerPoint.y)
-	let moveTo = data[playerPoint.y+y][playerPoint.x+x]
 	if ( moveTo != 1 && moveTo != undefined) {
 		moves++
 		document.getElementById("moves").textContent = moves
