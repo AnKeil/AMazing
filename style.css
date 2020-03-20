@@ -8,7 +8,7 @@
 }
 
 body {
-	height: 100vh;
+	
 }
 
 @keyframes batman {
@@ -57,6 +57,9 @@ html {
 	border: solid black 1px;
 	margin-left: -1px;
 	margin-top: -1px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .tile:hover {
@@ -71,11 +74,11 @@ html {
 	background: white;
 }
 
-.tile[data-isStart="true"] {
+.tile[data-value="2"] {
 	background: green;
 }
 
-.tile[data-isEnd="true"] {
+.tile[data-value="3"] {
 	background: red;
 }
 
@@ -88,12 +91,21 @@ html {
 	padding: 10px;
 }
 
+#player {
+	height: 10px;
+	width: 10px;
+	border-radius: 10px;
+	background: black;
+	border: solid white 1px;
+}
+
 /* LOGIN/REGISTER */
 
 body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
 }
 
 form {
