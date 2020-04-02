@@ -10,7 +10,7 @@ var sqlcon = mysql.createConnection({
   port: 3306,
   user: "root",
   password: "admin",
-  database: "amazeing"
+  database: "Amazeing"
 });
 
 sqlcon.connect(function(err) {
